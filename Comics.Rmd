@@ -1,0 +1,130 @@
+---
+title: "Comics"
+author: "rishabh"
+output:
+  pdf_document: default
+  html_document: default
+---
+## **GGPLOT Practice Excercise** ##
+
+1.Print the first rows of the data 
+```{r}
+r1 <- read.csv("Comics_Data.csv")
+r1[1,]
+names(r1)
+```
+
+2.Check Levels of Align Variable
+```{r}
+r2 <- r1[ ,c("align")] 
+levels(r2)
+```
+
+3.Check Levels of Gender
+```{r}
+r3 <- r1[ ,c("gender")] 
+levels(r3)
+```
+
+4.Create a 2 way table using align and gender
+```{r}
+table(r1$align, r1$gender)
+```
+
+5.Remove 'Reformed Criminals' level from align variable using dplyr
+```{r}
+library(dplyr)
+r4 <- factor(droplevels(r2, "Reformed Criminals"))
+head(r4)
+```
+
+6.Create a side by side bar chart of gender by align variable using ggplot
+```{r}
+library(ggplot2)
+ggplot(r1, aes(x = gender, fill = align)) + geom_bar(position = "dodge") 
+```
+
+7.Create a side by side bar chart of alignment by gender using ggplot
+```{r}
+ggplot(r1, aes(x = align, fill = gender)) + geom_bar(position = "dodge") 
+```
+
+8.Write the interpretation of bar charts
+
+1. There is an association between Gender and Alignment.
+2. There are less number of female characters than that of male        characters.
+3. bad alignment is less in female.
+4. The Characters with Neutral alignment, Males are the most common.
+
+9.Create a table of number of comics using align variable
+```{r}
+r5 <- table(r1$align)
+r5
+```
+
+10.Create a propotional table using the above table using prop.table(), what is the proportion of Bad, Good and Neutral
+```{r}
+r6 <- table(r1$align)
+prop.table(r6)
+```
+
+11.Create a propotional table using the above table using prop.table(), what is the proportion of No Dual, Public, Secret and Unknown
+```{r}
+r7 <- table(r1$id)
+prop.table(r7)
+
+```
+
+12. Plot the proportions using ggplot(use bar plot); x = id, y = proportion, fill = align
+```{r}
+ggplot(data = r1, aes(x = id, fill = align)) + geom_bar(position = "fill")
+
+```
+
+13. Plot same as above, swap the id and align variable
+```{r}
+ggplot(data = r1, aes(x = align, fill = id)) + geom_bar(position = "fill")
+
+```
+
+14. Using proportions, answer approximately what proportion of all female 
+characters are good
+```{r}
+r8 <- table(r1$align, r1$gender)
+prop.table(r8, 2)
+```
+Answer = 50%
+
+15. Plot the count of gender using align (use ggplot with bar)
+```{r}
+ggplot(r1, aes(x = align, fill = gender)) + geom_bar()
+```
+
+16. Plot the above plot using proportions
+```{r}
+ggplot(r1, aes(x = align, fill = gender)) + geom_bar(position = "fill")
+```
+
+17. Plot the distribution of id variable
+```{r}
+ggplot(r1, aes(x = id)) + geom_bar()
+```
+
+18. Using ggplot show the distribution of id variable, use facets to show the distribution for Bad, Good and Netural (Align Variable)
+```{r}
+ggplot(r1, aes(x = id)) + geom_bar() + facet_wrap(~ align)
+```
+
+19. Realgin the levels of align to show the plot as Bad, Netural and Good instead of Bad, Good and Neutral
+```{r}
+levels(r4)
+r9 <- factor(r1, levels = c("Bad", "Good", "Neutral"), labels = c("Bad", "Neutral", "Good"), exclude = NA)
+head(r9)
+```
+
+20. Make a facet plot of alignment broken down by gender
+```{r}
+ggplot(r1, aes(x = align)) + geom_bar() + facet_wrap(~ gender)
+
+```
+
